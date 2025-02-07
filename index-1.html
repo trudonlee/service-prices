@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lux Lox Salon - Service Menu</title>
+  <!-- Google Fonts for a high-end look -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for Consistent Colors */
+    :root {
+      --primary-color: #002b5c;
+      --accent-color: #d4af37;
+      --background-color: #f9f9f9;
+      --text-color: #333;
+      --card-border: #eee;
+    }
+
+    /* Base & Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    /* Header Styling */
+    .header {
+      position: relative;
+    }
+    .header img {
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+    .waitlist-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--accent-color), #c09933);
+      color: #fff;
+      padding: 12px 24px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .waitlist-button:hover {
+      background: linear-gradient(135deg, #b89630, #a67c2a);
+      transform: translateY(-2px);
+    }
+    /* Content & Title */
+    .content {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      background: -webkit-linear-gradient(var(--primary-color), var(--accent-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Card Container */
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .card {
+      background: #fff;
+      width: 280px;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--accent-color);
+    }
+    .card h2 {
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 12px;
+      font-size: 1.75rem;
+      color: var(--primary-color);
+    }
+    .card p {
+      color: #666;
+      font-size: 1rem;
+    }
+    /* Modal Styling */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-content {
+      background: #fff;
+      margin: 5% auto;
+      padding: 30px;
+      max-width: 800px;
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      animation: popIn 0.4s ease;
+    }
+    .modal-content h2 {
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      font-size: 2rem;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+    }
+    .modal-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .modal-content th,
+    .modal-content td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .modal-content th {
+      background: #f5f5f5;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+    .modal-content td {
+      font-family: 'Open Sans', sans-serif;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .close:hover {
+      color: var(--accent-color);
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 600px) {
+      .card {
+        width: 90%;
+      }
+      .modal-content {
+        margin: 10% auto;
+        width: 95%;
+        padding: 20px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header with Image & Waitlist Button -->
+    <div class="header">
+      <img src="https://i.imgur.com/A2l0O4m.jpeg" alt="Lux Lox Salon Header">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdJ53XnKv_TbNLvCDEydUGNzeonT8IwuVBHF6crn_kgr68oIg/viewform?usp=header" class="waitlist-button" target="_blank">Join Waitlist</a>
+    </div>
+    <!-- Main Content -->
+    <div class="content">
+      <h1>Our Service Menu</h1>
+      <div class="card-container">
+        <div class="card" data-category="extensions">
+          <h2>Extensions</h2>
+          <p>View our range of extension services</p>
+        </div>
+        <div class="card" data-category="hair-coloring">
+          <h2>Hair Coloring</h2>
+          <p>Discover our coloring techniques</p>
+        </div>
+        <div class="card" data-category="hair-texture">
+          <h2>Hair Texture</h2>
+          <p>Explore smoothing and texturizing options</p>
+        </div>
+        <div class="card" data-category="haircuts-styling">
+          <h2>Haircuts &amp; Styling</h2>
+          <p>Modern cuts and styling services</p>
+        </div>
+        <div class="card" data-category="consultations">
+          <h2>Consultations</h2>
+          <p>Schedule your personalized consultation</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Service Details -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript for Modal Functionality -->
+  <script>
+    // Data for each service category (HTML content)
+    const serviceData = {
+      "extensions": `
+        <h2>Extensions</h2>
+        <table>
+          <tr><th>Service</th><th>Price / Time</th></tr>
+          <tr>
+            <td>I-tip Extensions<br><small>Price varies ・ 30 min</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr><td>Installation Per Bundle</td><td>$150.00 ・ 30 min</td></tr>
+          <tr><td>Move-up Per Bundle</td><td>$60.00 ・ 30 min</td></tr>
+          <tr><td>Move-up 9+ Weeks</td><td>$75.00 ・ 30 min</td></tr>
+          <tr><td>Removal per hour</td><td>$100.00 ・ 30 min</td></tr>
+          <tr><td>Detangle, De-matting, Removal</td><td>$150.00 ・ 30 min</td></tr>
+          <tr>
+            <td>K-tip Extensions<br><small>Price varies ・ 30 min+</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr><td>Installation Half Pack</td><td>$150.00 ・ 30 min</td></tr>
+          <tr><td>Install 1 Pack</td><td>$300.00 ・ 1 hr</td></tr>
+          <tr><td>Install 2 Packs</td><td>$600.00 ・ 1 hr 30 min</td></tr>
+          <tr><td>Install 3 Packs</td><td>$900.00 ・ 2 hr</td></tr>
+          <tr><td>Install 4 Packs</td><td>$1,200.00 ・ 2 hr 15 min</td></tr>
+          <tr>
+            <td>Tape-In Extensions<br><small>Price varies ・ 45 min+</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr><td>Installation Full Pack</td><td>$200.00 ・ 45 min</td></tr>
+          <tr><td>Move-Up Full Pack</td><td>$200.00 ・ 1 hr</td></tr>
+          <tr><td>Removal per hour</td><td>$100.00 ・ 1 hr</td></tr>
+          <tr>
+            <td>Volume Weft Extensions<br><small>Price varies ・ 30 min+</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr><td>Install 1 Row</td><td>$250.00 ・ 1 hr</td></tr>
+          <tr><td>Install Additional Row</td><td>$150.00 ・ 30 min</td></tr>
+          <tr><td>Move-up 1 Row</td><td>$75.00 ・ 30 min</td></tr>
+          <tr><td>Move-up 2 Rows</td><td>$150.00 ・ 45 min</td></tr>
+          <tr><td>Move-up 3 Rows</td><td>$225.00 ・ 1 hr 10 min</td></tr>
+        </table>`,
+      "hair-coloring": `
+        <h2>Hair Coloring</h2>
+        <table>
+          <tr><th>Service</th><th>Price / Time</th></tr>
+          <tr><td>Root Touch-Up + Blowdry</td><td>$175.00 ・ 1 hr 15 min</td></tr>
+          <tr><td>Touch-up Partial Highlights + Toner + Blowdry</td><td>$225.00 ・ 1 hr 50 min</td></tr>
+          <tr><td>Touch-up Full Highlights + Toner + Blowdry</td><td>$300.00 ・ 2 hr 10 min</td></tr>
+          <tr><td>All Over Color + Blowdry</td><td>$200.00 ・ 2 hr 10 min</td></tr>
+          <tr><td>All Over Bleach + Toner + Blowdry</td><td>$300.00 ・ 3 hr</td></tr>
+          <tr><td>Demi Permanent Glaze + Blowdry</td><td>$175.00 ・ 1 hr</td></tr>
+          <tr><td>Face Framing Highlights + Toner + Blowdry</td><td>$175.00 ・ 2 hr 30 min</td></tr>
+          <tr><td>Partial Highlights + Toner + Blowdry</td><td>$250.00 ・ 2 hr 30 min</td></tr>
+          <tr><td>Full Highlights + Toner + Blowdry</td><td>$350.00 ・ 3 hr</td></tr>
+          <tr>
+            <td>Bleach Touch Up + Toner + Blowdry<br><small>Options: Lux: $200.00 ・ 2 hr<br>Lox: $175.00 ・ 2 hr</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Toner/Vivids Overlay<br><small>Price varies ・ 45 min<br>Options: Lux: $85.00 ・ 45 min<br>Lox: $70.00 ・ 45 min</small></td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>`,
+      "hair-texture": `
+        <h2>Hair Texture</h2>
+        <table>
+          <tr><th>Service</th><th>Price / Time</th></tr>
+          <tr>
+            <td>Keratin Complex Smoothing Treatment<br><small>Price varies ・ 1 hr 10 min+</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr><td>Regular</td><td>$250.00 ・ 1 hr 10 min</td></tr>
+          <tr><td>Lox</td><td>$200.00 ・ 1 hr 30 min</td></tr>
+        </table>`,
+      "haircuts-styling": `
+        <h2>Haircuts & Styling</h2>
+        <table>
+          <tr><th>Service</th><th>Price / Time</th></tr>
+          <tr><td>Haircut including shampoo + blowdry</td><td>$75.00 - $95.00 ・ 55 min</td></tr>
+          <tr><td>Styling (No Wash) - Flat Iron, Waves, Curls</td><td>$50.00 ・ 30 min</td></tr>
+          <tr><td>Add-on Haircut to Service</td><td>$65.00 ・ 30 min</td></tr>
+          <tr>
+            <td>Up-do / Down-do / Curling / Braiding<br><small>Price varies ・ 45 min+<br>Options: Lux: $85.00 ・ 1 hr 15 min<br>Lox: $65.00 ・ 45 min</small></td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr><td>Oligo Smart Bond Hair Treatment</td><td>$100.00 ・ 1 hr 5 min</td></tr>
+        </table>`,
+      "consultations": `
+        <h2>Consultations</h2>
+        <table>
+          <tr><th>Service</th><th>Price / Time</th></tr>
+          <tr><td>New Client Consultation</td><td>$50.00 ・ 30 min</td></tr>
+          <tr><td>Hair Extension Consultation</td><td>$50.00 ・ 25 min</td></tr>
+        </table>`
+    };
+
+    // Modal functionality
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeBtn = document.querySelector('.modal .close');
+
+    // Open modal when a card is clicked
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function() {
+        const category = card.getAttribute('data-category');
+        modalBody.innerHTML = serviceData[category] || '<p>Details coming soon.</p>';
+        modal.style.display = 'block';
+      });
+    });
+
+    // Close modal when clicking the close button or outside the modal content
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
